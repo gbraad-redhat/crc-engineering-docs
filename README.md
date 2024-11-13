@@ -11,3 +11,17 @@ The following diagrams plugins are used in this documentation:
  - Mermaid
  - Excalidraw
 
+
+## Usage instructions
+You can open this repo on GitHub to read, use the GitHub Pages for a published version, or use an editor.
+For example, it is easy to use `.` to start the GitHub Web Editor to read and edit these files.
+
+
+## Build instructions
+To create the HTML output, you can use:
+
+```
+$ podman run --rm -v $PWD:/workspace ghcr.io/gbraad-redhat/mdbook:0.4.42 mdbook build
+```
+
+This will create a `book` folder that comntains the output for a static webpage like GitHub Pages.

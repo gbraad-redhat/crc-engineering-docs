@@ -1,0 +1,25 @@
+name: Build and publish docs
+on:
+  push:
+    branches:
+      - "main"
+  pull_request: {}
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Build docs
+        run: docker run --rm -v $PWD:/workspace ghcr.io/gbraad-redhat/mdbook:0.4.42 mdbook build
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./book

@@ -5,7 +5,10 @@ CRC Engineering docs
 [Disclaimer](README.md)
 
 ## Development guide
-- [Developing](Developing.md)
+- [Development]()
+  - [Developing](Developing.md)
+  - [Testing](Testing.md)
+  - [Releasing](Releasing.md)
 - [Debugging](Debugging-guide.md)
 - [Installation]()
   - [macOS code signing](macOS-code-signing.md)

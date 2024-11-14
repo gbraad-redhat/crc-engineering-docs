@@ -29,4 +29,4 @@ To create the HTML output, you can use:
 $ podman run --rm -v $PWD:/workspace ghcr.io/gbraad-redhat/mdbook:0.4.42 mdbook build
 ```
 
-This will create a `book` folder that comntains the output for a static webpage like GitHub Pages.
+This will create a `book` folder that contains the output for a static webpage like GitHub Pages.

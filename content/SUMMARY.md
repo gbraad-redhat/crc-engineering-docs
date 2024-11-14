@@ -7,9 +7,9 @@ CRC Engineering docs
 ## Development guide
 - [Development]()
   - [Developing](Developing.md)
+  - [Debugging](Debugging.md)
   - [Testing](Testing.md)
   - [Releasing](Releasing.md)
-- [Debugging](Debugging-guide.md)
 - [Installation]()
   - [macOS code signing](macOS-code-signing.md)
   - [Windows installation process](Windows-installation.md)

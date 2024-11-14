@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Developing - CRC Engineering docs</title>
+        <title>Releasing - CRC Engineering docs</title>
 
 
         <!-- Custom HTML head -->
@@ -389,76 +389,38 @@
   --color-pink: #d53984;
 }
 </style>
-<h1 id="developing-crc"><a class="header" href="#developing-crc">Developing CRC</a></h1>
-<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
-<p>The following sections describe how to build and test the project.</p>
-<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
-<ul>
-<li><code>git</code></li>
-<li><code>make</code></li>
-<li>A recent Go distribution (&gt;=1.11)</li>
-</ul>
-<div class="mdbook-callouts mdbook-callouts-note">
-<p class="mdbook-callouts-title">
-  <span class="mdbook-callouts-icon"></span>
-  note
-</p>
-<p>You should be able to develop the project on Linux, Windows, or macOS.</p>
-</div>
-<h2 id="setting-up-the-development-environment"><a class="header" href="#setting-up-the-development-environment">Setting up the development environment</a></h2>
-<h3 id="cloning-the-repository"><a class="header" href="#cloning-the-repository">Cloning the repository</a></h3>
-<p>Get the sources from GitHub:</p>
-<pre><code>$ git clone https://github.com/crc-org/crc.git
+<h1 id="releasing-on-github"><a class="header" href="#releasing-on-github">Releasing on GitHub</a></h1>
+<h2 id="releasing-using-the-github-actions-workflow"><a class="header" href="#releasing-using-the-github-actions-workflow">Releasing using the github actions workflow</a></h2>
+<p>The GitHub Actions workflow <a href="https://github.com/crc-org/crc/actions/workflows/release.yml"><code>Publish release on github</code></a> creates a draft release and provides a template with all the component versions and the git change log.</p>
+<p>To start the workflow go to the <a href="https://github.com/crc-org/crc/actions/workflows/release.yml">workflow page</a> and click on the <code>Run Workflow</code> button, make sure to choose the appropriate tag for the release.</p>
+<p>Once the draft release is available, edit it to include the notable changes for the release and press publish to make it public.</p>
+<h2 id="releasing-using-the-gh-releasesh-script"><a class="header" href="#releasing-using-the-gh-releasesh-script">Releasing using the <code>gh-release.sh</code> script</a></h2>
+<p>In the CRC repository, we have a script <a href="https://github.com/crc-org/crc/blob/main/gh-release.sh"><code>gh-release.sh</code></a> which uses the <a href="https://cli.github.com"><code>gh</code></a> tool, make sure it is installed.</p>
+<p>Create a markdown file containing a list of the notable changes named <code>notable_changes.txt</code> in the same directory as the script.</p>
+<p>An example <code>notable_changes.txt</code>:</p>
+<pre><code class="language-bash">$ cat notable_changes.txt
+- Fixes a bug where `oc` binary was not extracted from bundle when using microshift preset [#3581](https://github.com/crc-org/crc/issues/3581)
+- Adds 'microshift' as a possible value to the help string of the 'preset' config option [#3576](https://github.com/crc-org/crc/issues/3576)
 </code></pre>
-<div class="mdbook-callouts mdbook-callouts-note">
-<p class="mdbook-callouts-title">
-  <span class="mdbook-callouts-icon"></span>
-  note
-</p>
-<p>Do not keep the source code in your <code>$GOPATH</code>, as <a href="https://github.com/golang/go/wiki/Modules">Go modules</a> will cause <code>make</code> to fail.</p>
-</div>
-<h2 id="dependency-management"><a class="header" href="#dependency-management">Dependency management</a></h2>
-<p>CRC uses <a href="https://github.com/golang/go/wiki/Modules">Go modules</a> for dependency management.</p>
-<p>For more information, see the following:</p>
-<ol>
-<li><a href="https://github.com/golang/go/wiki/Modules">Introduction to Go modules</a></li>
-<li><a href="https://blog.golang.org/using-go-modules">Using Go modules</a></li>
-</ol>
-<h2 id="compiling-the-crc-binary"><a class="header" href="#compiling-the-crc-binary">Compiling the CRC Binary</a></h2>
-<p>In order to compile the crc executable for your local platform, run the following command:</p>
-<pre><code class="language-bash">$ make
+<p>Then run the script from the release tag and follow the prompts, it’ll ask for confirmation before pushing the draft release to GitHub.</p>
+<blockquote>
+<p>[!NOTE]
+The script will exit with error if it doesn’t find a tag starting with <code>v</code> in the current git HEAD.</p>
+</blockquote>
+<pre><code class="language-bash">$ git checkout v2.18.0
+$ ./gh-release.sh
 </code></pre>
-<p>By default, the above command will place the crc executable in the <code>$GOBIN</code> path.</p>
-<p>Run the following command to cross-compile the crc executable for many platforms:</p>
-<pre><code class="language-bash">$ make cross
-</code></pre>
-<p><strong>Note</strong>: This command will output the cross-compiled crc executable(s) in the <code>out</code> directory by default:</p>
-<pre><code class="language-bash">$ tree out/
-out/
-├── linux-amd64
-│   └── crc
-├── macos-amd64
-│   └── crc
-└── windows-amd64
-    └── crc.exe
-</code></pre>
-<h2 id="running-unit-tests"><a class="header" href="#running-unit-tests">Running unit tests</a></h2>
-<p>To run all unit test use:</p>
-<pre><code class="language-bash">$ make test
-</code></pre>
-<p>If you need to update mocks use:</p>
-<pre><code class="language-bash">$ make generate_mocks
-</code></pre>
+<p>Verify the draft release on the releases page and if everything looks good press publish to make the release public.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="Testing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="Testing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="Debugging-guide.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -468,11 +430,11 @@ out/
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="Testing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="Testing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="Debugging-guide.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

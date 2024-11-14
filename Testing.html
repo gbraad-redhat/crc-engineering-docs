@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Developing - CRC Engineering docs</title>
+        <title>Testing - CRC Engineering docs</title>
 
 
         <!-- Custom HTML head -->
@@ -389,76 +389,53 @@
   --color-pink: #d53984;
 }
 </style>
-<h1 id="developing-crc"><a class="header" href="#developing-crc">Developing CRC</a></h1>
-<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
-<p>The following sections describe how to build and test the project.</p>
-<h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
+<h1 id="testing"><a class="header" href="#testing">Testing</a></h1>
+<h2 id="running-e2e-tests"><a class="header" href="#running-e2e-tests">Running e2e tests</a></h2>
+<p>We have automated e2e tests which ensure the quality of our deliverable; CRC, and system bundle.</p>
+<h3 id="introduction"><a class="header" href="#introduction">Introduction</a></h3>
+<p>End-to-end (e2e) tests borrow code from <a href="http://github.com/crc-org/clicumber">Clicumber</a> package to provide basic functionality for testing CLI binaries. This facilitates running commands in a persistent shell instance (<code>bash</code>, <code>tcsh</code>, <code>zsh</code>, Command Prompt, or PowerShell), assert its outputs (standard output, standard error, or exit code), check configuration files, and so on. The general functionality of Clicumber is then extended by CRC specific test code to cover the whole functionality of CRC.</p>
+<h3 id="how-to-run"><a class="header" href="#how-to-run">How to run</a></h3>
+<p>First, one needs to set the following flags in <code>Makefile</code>, under <code>e2e</code> target:</p>
 <ul>
-<li><code>git</code></li>
-<li><code>make</code></li>
-<li>A recent Go distribution (&gt;=1.11)</li>
+<li><code>--pull-secret-file</code><br />
+absolute path to your OpenShift pull secret.</li>
+<li><code>--bundle-location</code><br />
+if bundle is embedded, this flag should be set to <code>--bundle-location=embedded</code> or not passed at all<br />
+if bundle is not embedded, then absolute path to the bundle should be passed</li>
+<li><code>--crc-binary</code><br />
+if <code>crc</code> binary resides in <code>$GOPATH/bin</code>, then this flag does not need to be passed<br />
+otherwise absolute path to the <code>crc</code> binary should be passed.</li>
 </ul>
-<div class="mdbook-callouts mdbook-callouts-note">
-<p class="mdbook-callouts-title">
-  <span class="mdbook-callouts-icon"></span>
-  note
-</p>
-<p>You should be able to develop the project on Linux, Windows, or macOS.</p>
-</div>
-<h2 id="setting-up-the-development-environment"><a class="header" href="#setting-up-the-development-environment">Setting up the development environment</a></h2>
-<h3 id="cloning-the-repository"><a class="header" href="#cloning-the-repository">Cloning the repository</a></h3>
-<p>Get the sources from GitHub:</p>
-<pre><code>$ git clone https://github.com/crc-org/crc.git
+<p>To start e2e tests, run:</p>
+<pre><code class="language-bash">$ make e2e
 </code></pre>
-<div class="mdbook-callouts mdbook-callouts-note">
-<p class="mdbook-callouts-title">
-  <span class="mdbook-callouts-icon"></span>
-  note
-</p>
-<p>Do not keep the source code in your <code>$GOPATH</code>, as <a href="https://github.com/golang/go/wiki/Modules">Go modules</a> will cause <code>make</code> to fail.</p>
-</div>
-<h2 id="dependency-management"><a class="header" href="#dependency-management">Dependency management</a></h2>
-<p>CRC uses <a href="https://github.com/golang/go/wiki/Modules">Go modules</a> for dependency management.</p>
-<p>For more information, see the following:</p>
-<ol>
-<li><a href="https://github.com/golang/go/wiki/Modules">Introduction to Go modules</a></li>
-<li><a href="https://blog.golang.org/using-go-modules">Using Go modules</a></li>
-</ol>
-<h2 id="compiling-the-crc-binary"><a class="header" href="#compiling-the-crc-binary">Compiling the CRC Binary</a></h2>
-<p>In order to compile the crc executable for your local platform, run the following command:</p>
-<pre><code class="language-bash">$ make
+<h4 id="how-to-run-only-a-subset-of-all-e2e-tests"><a class="header" href="#how-to-run-only-a-subset-of-all-e2e-tests">How to run only a subset of all e2e tests</a></h4>
+<p>Implicitly, all e2e tests for your operating system are executed. If you want to run only tests from one feature file, you have to override <code>GODOG_OPTS</code> environment variable. For example:</p>
+<pre><code class="language-bash">make e2e GODOG_OPTS="--godog.tags='@basic &amp;&amp; @windows'" BUNDLE_LOCATION=&lt;bundle location&gt; PULL_SECRET_FILE=&lt;pull secret path&gt;
 </code></pre>
-<p>By default, the above command will place the crc executable in the <code>$GOBIN</code> path.</p>
-<p>Run the following command to cross-compile the crc executable for many platforms:</p>
-<pre><code class="language-bash">$ make cross
+<p>Please notice <code>@basic &amp;&amp; @windows</code>, where <code>@basic</code> tag stands for <code>basic.feature</code> file and <code>@windows</code> tag for e2e tests designed for Windows.</p>
+<h3 id="how-to-test-cert-rotation"><a class="header" href="#how-to-test-cert-rotation">How to test cert rotation</a></h3>
+<p>On linux platform first stop the network time sync using:</p>
+<pre><code class="language-bash">$ sudo timedatectl set-ntp off
 </code></pre>
-<p><strong>Note</strong>: This command will output the cross-compiled crc executable(s) in the <code>out</code> directory by default:</p>
-<pre><code class="language-bash">$ tree out/
-out/
-├── linux-amd64
-│   └── crc
-├── macos-amd64
-│   └── crc
-└── windows-amd64
-    └── crc.exe
+<p>Set the time 2 month ahead:</p>
+<pre><code class="language-bash">$ sudo date -s '2 month'
 </code></pre>
-<h2 id="running-unit-tests"><a class="header" href="#running-unit-tests">Running unit tests</a></h2>
-<p>To run all unit test use:</p>
-<pre><code class="language-bash">$ make test
+<p>Start the crc with <code>CRC_DEBUG_ENABLE_STOP_NTP=true</code> set:</p>
+<pre><code class="language-bash">$ CRC_DEBUG_ENABLE_STOP_NTP=true crc start
 </code></pre>
-<p>If you need to update mocks use:</p>
-<pre><code class="language-bash">$ make generate_mocks
-</code></pre>
+<h3 id="logs"><a class="header" href="#logs">Logs</a></h3>
+<p>Test logs can be found in <code>test/e2e/out/test-results</code>.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="index.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="Developing.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="Testing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="Releasing.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -468,11 +445,11 @@ out/
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="index.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="Developing.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="Testing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="Releasing.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

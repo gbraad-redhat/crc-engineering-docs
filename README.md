@@ -12,7 +12,7 @@ The following diagrams plugins are used in this documentation:
  - Excalidraw
 
 
-## Contens
+## Contents
 
   - [Start here](./content/SUMMARY.md)
 

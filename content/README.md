@@ -7,4 +7,4 @@ Disclaimer
 
 ---
 
-To suggest edits to this document, please visit https://github.com/gbraad-redhat/crc-engineering-docs/
+To suggest edits to this document, please visit [https://github.com/gbraad-redhat/crc-engineering-docs/](https://github.com/gbraad-redhat/crc-engineering-docs/)

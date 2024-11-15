@@ -8,8 +8,7 @@
         "vscode": {
             "extensions": [
                 "pomdtr.excalidraw-editor",
-                "bierner.markdown-mermaid",
-                "ritwickdey.liveserver"
+                "bierner.markdown-mermaid"
             ]
         }
     }

@@ -65,3 +65,8 @@ On Windows, this is slightly more complicated. Please follow this guide:
 
 > [!CAUTION]
 > Don't run Docker Desktop with Kubernetes activated and CRC side-by-side. This might lead to overlapping of ports.
+
+
+## Technical details
+
+![gvproxy](kroki-excalidraw:./assets/gvproxy.excalidraw)

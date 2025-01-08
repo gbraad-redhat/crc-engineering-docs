@@ -14,31 +14,31 @@ With this following `ssh-config`, enter the VM. The IP can be found with `crc ip
 Host crc
     Hostname 192.168.130.11
     User core
-    IdentityFile ~/.crc/machines/crc/id_rsa
     IdentityFile ~/.crc/machines/crc/id_ecdsa
+    IdentityFile ~/.crc/machines/crc/id_ed25519
     StrictHostKeyChecking no
     UserKnownHostsFile /dev/null
 
 ```
 
 If you use vsock network mode, the IP is 127.0.0.1 and the port is 2222. 
-On Windows, the relevant SSH keys is in `C:\Users\%USERNAME%\.crc\machines\crc\id_ecdsa`
+On Windows, the relevant SSH keys is in `C:\Users\%USERNAME%\.crc\machines\crc\id_ed25519`
 
 You can also run directly this command:
 
 #### Linux
 ```bash
-$ ssh -i ~/.crc/machines/crc/id_ecdsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null core@192.168.130.11
+$ ssh -i ~/.crc/machines/crc/id_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null core@192.168.130.11
 ```
 
 #### MacOS
 ```bash
-$ ssh -i ~/.crc/machines/crc/id_ecdsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 core@127.0.0.1
+$ ssh -i ~/.crc/machines/crc/id_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 core@127.0.0.1
 ```
 
 #### Windows
 ```powershell
-PS> ssh -i C:\Users\$env:USERNAME\.crc\machines\crc\id_ecdsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 core@127.0.0.1
+PS> ssh -i C:\Users\$env:USERNAME\.crc\machines\crc\id_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p 2222 core@127.0.0.1
 ```
 
 ## Checking the status of the VM
